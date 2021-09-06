@@ -56,6 +56,7 @@ foreach($letter1 in $L1){
       }
     }
     Compress-Archive -Path .\pictures\*.png -DestinationPath .\Archive\$letter1$letter2.zip
+    Remove-Item -Path .\pictures\*.png
   }
   Compress-Archive -Path .\Archive\a*.zip -DestinationPath .\Archive\A.zip
 }
