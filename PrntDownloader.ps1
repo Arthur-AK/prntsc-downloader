@@ -12,14 +12,16 @@ New-Item -Path .\pictures -ItemType Directory
 [int[]] $num3 = 0 .. 9
 [int[]] $num4 = 0 .. 9
 
-$done = @(Get-ChildItem -Path '.\Archive\*.zip' -Name)
-$archive = $done.Count
-$archivemin1 = $archive - 1
-if($archive -eq 1){$L2.RemoveAt(0)}
-if($archive -gt 1 -and $archive -lt 26){$L2.RemoveRange(0, $archivemin1)}
-
 foreach($letter1 in $L1){
+  $done = @(Get-ChildItem -Path '.\Archive\*.zip' -Name)
+  if($done -contains "$letter1.zip"){
+    continue
+  }
   foreach($letter2 in $L2){
+    $done = @(Get-ChildItem -Path '.\Archive\*.zip' -Name)
+    if($done -contains "$letter1$letter2.zip"){
+      continue
+    }
     foreach($number1 in $num1){
       foreach($number2 in $num2){
         foreach($number3 in $num3){
