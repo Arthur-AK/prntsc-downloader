@@ -1,4 +1,4 @@
-﻿# check www.prnt.sc/XX0000
+# check www.prnt.sc/XX0000
 
 New-Item -Path .\Archive -ItemType Directory
 New-Item -Path .\pictures -ItemType Directory
@@ -26,10 +26,20 @@ foreach($letter1 in $L1){
           foreach($number4 in $num4){
             if(!(Get-Item -Path .\pictures\$Letter1$Letter2$number1$number2$number3$number4.png -ErrorAction Ignore)){
               $Content = $(Invoke-WebRequest -Uri www.prnt.sc/$Letter1$Letter2$number1$number2$number3$number4).Content
-              $Content_Location = $Content.IndexOf('no-click screenshot-image')
+              try{
+                $Content_Location = $Content.IndexOf('no-click screenshot-image')
+              } catch {
+                Write-Host "Cannot locate $Letter1$letter2$number1$number2$number3$number4. Moving to next file..."
+                Copy-Item -Path .\nofile.png -Destination .\pictures\$Letter1$Letter2$number1$number2$number3$number4.png
+              }
               $Content_Location2 = $Content.SubString($Content_Location,63)
               $Content_Location3 = $Content_Location2.IndexOf('http')
-              $Content_Final = $Content_Location2.SubString($Content_Location3)
+              try{
+                $Content_Final = $Content_Location2.SubString($Content_Location3)
+              } catch {
+                Write-Host "Cannot locate $Letter1$letter2$number1$number2$number3$number4. Moving to next file..."
+                Copy-Item -Path .\nofile.png -Destination .\pictures\$Letter1$Letter2$number1$number2$number3$number4.png
+              }
               "$Letter1$Letter2$number1$number2$number3$number4 --- $Content_Final" | Out-File -FilePath .\Archive\$letter1$letter2.log -Append
               try{
                 Invoke-WebRequest $Content_Final -OutFile .\pictures\$Letter1$Letter2$number1$number2$number3$number4.png -ErrorAction SilentlyContinue
